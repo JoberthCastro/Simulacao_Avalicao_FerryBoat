@@ -152,14 +152,24 @@ function FerryAnimation({
 
   const toInsight = (m) => {
     const utilizationPct = Math.max(0, Math.min(100, (m.utilization || 0) * 100));
+    const waitMinutes = (m.waitTime || 0);
+
+    // Classificação combinando ocupação e tempo de espera
+    // - Crítico: espera muito alta ou ocupação extrema com espera relevante
+    // - Movimento: sinais de aperto (espera moderada ou alta ocupação)
+    // - Tranquilo: caso contrário
     let status = 'Tranquilo';
-    if (utilizationPct >= 85) status = 'Crítico';
-    else if (utilizationPct >= 60) status = 'Movimento';
+    if (waitMinutes >= 60 || (utilizationPct >= 95 && waitMinutes >= 20)) {
+      status = 'Crítico';
+    } else if (waitMinutes >= 20 || utilizationPct >= 75) {
+      status = 'Movimento';
+    }
+
     let tip = 'Boa janela para viajar.';
     if (status === 'Movimento') tip = 'Chegue com antecedência.';
-    if (status === 'Crítico') tip = 'Considere reservar.';
+    if (status === 'Crítico') tip = 'Reserve para garantir embarque.';
     return {
-      waitMinutes: (m.waitTime || 0),
+      waitMinutes,
       utilizationPct,
       queueLength: (m.queueLength || 0),
       status,
