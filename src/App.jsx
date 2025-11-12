@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { FerryProvider } from './context/FerryContext';
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home/Home';
-import Simulacao from './pages/Simulacao/Simulacao';
 import SimulacaoPublic from './pages/SimulacaoPublic/SimulacaoPublic';
 import Agendamento from './pages/Agendamento/Agendamento';
 import Relatos from './pages/Relatos/Relatos';
@@ -29,7 +28,6 @@ function App() {
             <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             <Route path="/admin/manutencao" element={<AdminRoute><AdminManutencao /></AdminRoute>} />
             <Route path="/admin/simulacao" element={<AdminRoute><AdminSimulacao /></AdminRoute>} />
-            <Route path="/admin/what-if" element={<AdminRoute><Simulacao /></AdminRoute>} />
             <Route path="/admin/relatos" element={<AdminRoute><AdminRelatos /></AdminRoute>} />
           </Routes>
         </Layout>

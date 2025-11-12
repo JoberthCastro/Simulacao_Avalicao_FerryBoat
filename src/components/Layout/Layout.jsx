@@ -51,7 +51,7 @@ function Layout({ children }) {
                 <Link to="/relatos" className={location.pathname === '/relatos' ? 'active' : ''}>
                   Relatos
                 </Link>
-                <Link to="/admin/dashboard" className="admin-link">
+                <Link to="/admin/login" className="admin-link">
                   Admin
                 </Link>
               </>
@@ -62,9 +62,6 @@ function Layout({ children }) {
                 </Link>
                 <Link to="/admin/simulacao" className={location.pathname === '/admin/simulacao' ? 'active' : ''}>
                   Simulação
-                </Link>
-                <Link to="/admin/what-if" className={location.pathname === '/admin/what-if' ? 'active' : ''}>
-                  Simulação Inteligente
                 </Link>
                 <Link to="/admin/manutencao" className={location.pathname === '/admin/manutencao' ? 'active' : ''}>
                   Manutenção

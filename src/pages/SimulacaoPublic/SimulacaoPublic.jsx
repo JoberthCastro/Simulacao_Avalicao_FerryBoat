@@ -5,6 +5,7 @@ import Button from '../../components/Button/Button';
 import RecommendationCard from '../../components/RecommendationCard/RecommendationCard';
 import SimulationChart from '../../components/SimulationChart/SimulationChart';
 import { compareReservationVsNoReservation, estimateLambdaByHour } from '../../utils/simulation';
+import FerryAnimation from '../../components/FerryAnimation/FerryAnimation';
 import './SimulacaoPublic.css';
 
 function SimulacaoPublic() {
@@ -18,6 +19,7 @@ function SimulacaoPublic() {
   const [time, setTime] = useState('');
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [animCfg, setAnimCfg] = useState(null);
 
   const timeOptions = useMemo(() => {
     if (origin === 'ponta' && destination === 'cujupe') {
@@ -63,12 +65,23 @@ function SimulacaoPublic() {
       scheduleGapMinutes
     };
 
+    setAnimCfg({
+      lambda,
+      mu: 25,
+      servers: 4,
+      reservationRate: 0.3,
+      peakHours: (hour >= 7 && hour < 9) || (hour >= 17 && hour < 19),
+      capacityPerFerry: 50,
+      cycleMinutes: 120,
+      scheduledMode: true,
+      scheduleGapMinutes
+    });
     setLoading(true);
     setTimeout(() => {
       const comparison = compareReservationVsNoReservation(params);
       setResults(comparison);
       setLoading(false);
-    }, 800);
+    }, 5000);
   };
 
   // Preencher horário padrão quando direção mudar
@@ -111,9 +124,23 @@ function SimulacaoPublic() {
               </Button>
             ) : (
               <div className="loading-area">
-                <div className="ferry-spinner" aria-label="Carregando simulação">
-                  <span className="ferry-emoji" role="img" aria-hidden>⛴️</span>
-                </div>
+                <FerryAnimation
+                  active={loading}
+                  lambda={animCfg?.lambda ?? 120}
+                  mu={animCfg?.mu ?? 25}
+                  servers={animCfg?.servers ?? 4}
+                  reservationRate={animCfg?.reservationRate ?? 0.3}
+                  peakHours={animCfg?.peakHours ?? false}
+                  capacityPerFerry={animCfg?.capacityPerFerry ?? 50}
+                  cycleMinutes={animCfg?.cycleMinutes ?? 120}
+                  simMinutesPerSecond={0.4}
+                  speedSeconds={22}
+                  /* scheduled mode props */
+                  /* @ts-ignore - props optionals */
+                  scheduledMode={animCfg?.scheduledMode ?? false}
+                  /* @ts-ignore */
+                  scheduleGapMinutes={animCfg?.scheduleGapMinutes ?? 120}
+                />
                 <p className="loading-text">Processando simulação...</p>
               </div>
             )}
@@ -148,7 +175,7 @@ function SimulacaoPublic() {
               </div>
             </Card>
 
-            <Card title="Visualização">
+            <Card title="Visualização" className="chart-card">
               <SimulationChart results={results} />
             </Card>
           </>

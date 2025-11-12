@@ -1,0 +1,230 @@
+.ferry-animation {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+  background: linear-gradient(180deg, #e6f2ff 0%, #ffffff 60%);
+  margin-bottom: 1.5rem;
+}
+
+.ferry-animation .sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #e6f2ff 0%, rgba(255,255,255,0) 70%);
+}
+
+.ferry-animation .sea {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46%;
+  background: linear-gradient(180deg, #a7d6ff 0%, #6fb8ff 100%);
+  overflow: hidden;
+}
+
+.ferry-animation .wave {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  height: 14px;
+  background: radial-gradient(circle at 10px -6px, rgba(255,255,255,0.9) 8px, transparent 9px) repeat-x;
+  background-size: 24px 14px;
+  opacity: 0.7;
+  animation: wave-move var(--ferry-speed, 12s) linear infinite;
+  animation-play-state: paused;
+}
+
+.ferry-animation .wave-1 {
+  bottom: 22px;
+}
+
+.ferry-animation .wave-2 {
+  bottom: 8px;
+  opacity: 0.55;
+  animation-duration: calc(var(--ferry-speed, 12s) * 0.8);
+  animation-direction: reverse;
+}
+
+.ferry-animation.active .wave {
+  animation-play-state: running;
+}
+
+@keyframes wave-move {
+  from { transform: translateX(0); }
+  to   { transform: translateX(50%); }
+}
+
+.ferry-animation .dock {
+  position: absolute;
+  right: 18px;
+  bottom: 0;
+  width: 110px;
+  height: 55%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.ferry-animation .dock-pier {
+  width: 100%;
+  height: 10px;
+  background: #8b5e34;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.35);
+  border-radius: 4px 4px 0 0;
+}
+
+.ferry-animation .ferry-boat,
+.ferry-animation .ferry-boat-svg {
+  position: absolute;
+  bottom: 18px;
+  left: -220px;
+  width: 160px;
+  height: auto;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15));
+  z-index: 3;
+  animation:
+    ferry-arrive var(--ferry-speed, 12s) ease-in-out infinite,
+    ferry-bob 2.6s ease-in-out infinite;
+  animation-play-state: paused;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ferry-animation.active .ferry-boat,
+.ferry-animation.active .ferry-boat-svg {
+  animation-play-state: running;
+}
+
+@keyframes ferry-arrive {
+  0%   { transform: translateX(0); }
+  45%  { transform: translateX(calc(100vw - 300px)); } /* approaches the dock */
+  65%  { transform: translateX(calc(100vw - 300px)); } /* pause at dock */
+  100% { transform: translateX(0); }
+}
+
+@keyframes ferry-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+.mmc-overlay {
+  position: absolute;
+  inset: 8px 12px 12px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.queue-visual {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 55%;
+  align-self: flex-end;
+  margin-bottom: 8px;
+}
+
+.queue-visual .car {
+  width: 10px;
+  height: 6px;
+  border-radius: 2px;
+  background: #1f2937;
+  opacity: 0.75;
+}
+
+.queue-visual .more-cars {
+  font-size: 0.75rem;
+  color: #1f2937;
+  background: rgba(255,255,255,0.8);
+  padding: 2px 6px;
+  border-radius: 999px;
+  align-self: center;
+}
+
+.servers-visual {
+  display: flex;
+  gap: 6px;
+  align-self: flex-start;
+}
+
+.server-slot {
+  width: 78px;
+  height: 30px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #111827;
+}
+
+.server-slot.busy {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(5, 150, 105, 0.2);
+}
+
+.server-slot.pulse {
+  box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.0);
+  animation: pulse 0.8s ease-out;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.35); }
+  100% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+}
+
+.insight-panel {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  z-index: 5;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111827;
+}
+.status-badge.ok { background: rgba(16, 185, 129, 0.2); }
+.status-badge.warn { background: rgba(245, 158, 11, 0.25); }
+.status-badge.critical { background: rgba(239, 68, 68, 0.22); }
+
+.insight-items {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.insight-item {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 12px;
+  color: #111827;
+}
+.insight-item strong {
+  font-size: 13px;
+}
+.insight-tip {
+  font-size: 12px;
+  color: #374151;
+}
+
+

@@ -180,7 +180,7 @@ function Simulacao() {
               </div>
             </Card>
 
-            <Card title="Visualização Gráfica">
+            <Card title="Visualização Gráfica" className="chart-card">
               <SimulationChart results={results} />
             </Card>
           </>

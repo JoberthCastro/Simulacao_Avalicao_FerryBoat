@@ -44,4 +44,8 @@
   color: var(--text-secondary);
 }
 
+.chart-card {
+  grid-column: 1 / -1; /* expand chart to full width of the grid */
+}
+
 

@@ -152,6 +152,10 @@
   font-size: 1.1rem;
 }
 
+.chart-card {
+  grid-column: 1 / -1; /* expand chart to full width of the grid */
+}
+
 @media (max-width: 768px) {
   .simulacao h1 {
     font-size: 2rem;

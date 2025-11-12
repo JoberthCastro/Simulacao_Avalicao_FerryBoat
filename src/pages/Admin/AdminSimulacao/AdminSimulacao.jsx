@@ -3,6 +3,7 @@ import { mmcQueue, simulateFailureImpact } from '../../../utils/simulation';
 import Card from '../../../components/Card/Card';
 import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button/Button';
+import FerryAnimation from '../../../components/FerryAnimation/FerryAnimation';
 import './AdminSimulacao.css';
 
 function AdminSimulacao() {
@@ -15,6 +16,7 @@ function AdminSimulacao() {
 
   const [results, setResults] = useState(null);
   const [failureResults, setFailureResults] = useState(null);
+  const [animating, setAnimating] = useState(false);
 
   const handleParamChange = (field, value) => {
     setParams(prev => ({
@@ -24,18 +26,23 @@ function AdminSimulacao() {
   };
 
   const handleSimulate = () => {
+    setAnimating(true);
     const normal = mmcQueue(params.lambda, params.mu, params.servers);
     setResults(normal);
   };
 
   const handleSimulateFailure = () => {
+    setAnimating(true);
+    // Garante uma falha real: se disponível >= total, reduz para total - 1 (mín. 1)
+    const effectiveAvailable = Math.max(1, Math.min(params.availableServers, params.servers - 1));
+
     const impact = simulateFailureImpact(
       params.lambda,
       params.mu,
-      params.availableServers,
+      effectiveAvailable,
       params.servers
     );
-    setFailureResults(impact);
+    setFailureResults({ ...impact, assumedAvailable: effectiveAvailable });
   };
 
   return (
@@ -44,6 +51,20 @@ function AdminSimulacao() {
       <p className="page-subtitle">
         Simule cenários operacionais e analise o impacto de mudanças
       </p>
+
+      {animating && (
+        <FerryAnimation
+          variant="admin"
+          active={true}
+          lambda={params.lambda}
+          mu={params.mu}
+          servers={params.servers}
+          simMinutesPerSecond={0.4}
+          speedSeconds={22}
+          capacityPerFerry={50}
+          cycleMinutes={120}
+        />
+      )}
 
       <div className="simulacao-grid">
         <Card title="Parâmetros da Simulação">
@@ -118,6 +139,11 @@ function AdminSimulacao() {
         {failureResults && (
           <>
             <Card title="Impacto de Falhas/Manutenção">
+              {typeof failureResults.assumedAvailable === 'number' && failureResults.assumedAvailable >= 1 && (
+                <p className="page-subtitle" style={{ marginTop: '-0.5rem' }}>
+                  Considerando {failureResults.assumedAvailable} ferries disponíveis de {params.servers}.
+                </p>
+              )}
               <div className="failure-comparison">
                 <div className="comparison-section">
                   <h4>Operação Normal</h4>
