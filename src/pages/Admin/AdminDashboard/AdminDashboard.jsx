@@ -67,13 +67,18 @@ function AdminDashboard() {
     { ferry: 'Ferry 4', avgTime: 26 }
   ];
 
-  // Dados de carregamento (mock)
-  const loadingData = [
-    { ferry: 'Ferry 1', real: 42, projected: 45 },
-    { ferry: 'Ferry 2', real: 38, projected: 40 },
-    { ferry: 'Ferry 3', real: 45, projected: 48 },
-    { ferry: 'Ferry 4', real: 35, projected: 38 }
-  ];
+  // Carregamento Real vs Projetado alinhado com "Ocupação por Ferry"
+  // - real: usa os mesmos valores de veículos transportados (snapshot diário)
+  // - projected: meta uniforme diária por ferry (distribuição igual)
+  const projectedPerFerry = Math.round(DAILY_VEHICLES / Math.max(1, ferryCount));
+  const loadingData = occupancyData.map(d => ({
+    ferry: d.name,
+    real: d['Veículos Transportados'],
+    projected: projectedPerFerry
+  }));
+  const maxLoad = loadingData.length
+    ? Math.max(...loadingData.flatMap(v => [v.real, v.projected]))
+    : 0;
 
   // Mapa de calor de horários de pico (gerado para a semana inteira)
   const heatHours = ['06:00','07:00','08:00','09:00','17:00','18:00'];
@@ -161,6 +166,7 @@ function AdminDashboard() {
             nameKey="ferry"
             color={['#3b82f6', '#10b981']}
             type="multi"
+            yDomain={[0, Math.max(10, Math.ceil(maxLoad * 1.1))]}
           />
         </Card>
       </div>
