@@ -64,6 +64,9 @@ function AdminSimulacao() {
           capacityPerFerry={50}
           cycleMinutes={120}
           twoWay={true}
+          failureEnabled={true}
+          mtbfMinutes={480}
+          mttrMinutes={60}
         />
       )}
 

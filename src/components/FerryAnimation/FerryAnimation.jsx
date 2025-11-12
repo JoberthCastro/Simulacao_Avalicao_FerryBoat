@@ -18,13 +18,16 @@ function FerryAnimation({
   scheduleGapMinutes = 120,
   variant = 'public', // 'public' | 'admin'
   twoWay = false, // exibe ida e volta (duas direções)
+  failureEnabled = false, // falhas estocásticas (admin)
+  mtbfMinutes = 720, // tempo médio entre falhas por ferry
+  mttrMinutes = 60, // tempo médio de reparo
 }) {
   const [src, setSrc] = useState('/ferrybot.png');
   const [showSvg, setShowSvg] = useState(false);
   const styleVars = { '--ferry-speed': `${speedSeconds}s` };
   const [queueCount, setQueueCount] = useState(0);
   const [serverStates, setServerStates] = useState(() =>
-    Array.from({ length: Math.max(1, servers) }, () => ({ busy: false, remaining: 0, pulse: false }))
+    Array.from({ length: Math.max(1, servers) }, () => ({ busy: false, remaining: 0, pulse: false, failed: false, repairRemaining: 0 }))
   );
   const tickRef = useRef(null);
   const lastServersRef = useRef(servers);
@@ -89,7 +92,13 @@ function FerryAnimation({
 
         // advance service times and release finished
         for (const s of next) {
-          if (s.busy) {
+          if (s.failed) {
+            s.repairRemaining -= dtMinutes;
+            if (s.repairRemaining <= 0) {
+              s.failed = false;
+              s.repairRemaining = 0;
+            }
+          } else if (s.busy) {
             s.remaining -= dtMinutes;
             if (s.remaining <= 0) {
               s.busy = false;
@@ -103,7 +112,7 @@ function FerryAnimation({
         setQueueCount((q) => {
           let availableQueue = q;
           for (const s of next) {
-            if (!s.busy && availableQueue > 0) {
+            if (!s.failed && !s.busy && availableQueue > 0) {
               s.busy = true;
               s.remaining = sampleExponentialMinutes();
               availableQueue -= 1;
@@ -111,6 +120,20 @@ function FerryAnimation({
           }
           return availableQueue;
         });
+
+        // random failures (Poisson) per server
+        if (failureEnabled && mtbfMinutes > 0) {
+          const pFail = Math.min(1, dtMinutes / mtbfMinutes);
+          for (const s of next) {
+            if (!s.failed && Math.random() < pFail) {
+              s.failed = true;
+              s.busy = false;
+              const u = Math.random();
+              const repair = -Math.log(1 - u) * Math.max(mttrMinutes, 1);
+              s.repairRemaining = repair;
+            }
+          }
+        }
 
         return next;
       });
@@ -253,9 +276,9 @@ function FerryAnimation({
         </div>
         <div className="servers-visual" aria-label="Servidores (ferries)">
           {serverStates.map((s, idx) => (
-            <div key={idx} className={`server-slot ${s.busy ? 'busy' : ''} ${s.pulse ? 'pulse' : ''}`}>
+            <div key={idx} className={`server-slot ${s.busy ? 'busy' : ''} ${s.failed ? 'failed' : ''} ${s.pulse ? 'pulse' : ''}`}>
               <div className="server-label">F{idx + 1}</div>
-              <div className="server-status">{s.busy ? 'Em serviço' : 'Livre'}</div>
+              <div className="server-status">{s.failed ? 'Falha' : s.busy ? 'Em serviço' : 'Livre'}</div>
             </div>
           ))}
         </div>

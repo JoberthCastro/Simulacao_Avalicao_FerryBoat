@@ -190,6 +190,11 @@
   border-color: rgba(5, 150, 105, 0.2);
 }
 
+.server-slot.failed {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
 .server-slot.pulse {
   box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.0);
   animation: pulse 0.8s ease-out;
