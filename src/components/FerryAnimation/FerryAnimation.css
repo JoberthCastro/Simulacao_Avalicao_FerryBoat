@@ -67,6 +67,11 @@
   justify-content: center;
 }
 
+.ferry-animation .dock.dock-left {
+  left: 18px;
+  right: auto;
+}
+
 .ferry-animation .dock-pier {
   width: 100%;
   height: 10px;
@@ -92,6 +97,13 @@
   pointer-events: none;
 }
 
+.ferry-animation .ferry-boat.rightward {
+  left: auto;
+  right: -220px;
+  transform: scaleX(-1);
+  animation-name: ferry-arrive-right, ferry-bob;
+}
+
 .ferry-animation.active .ferry-boat,
 .ferry-animation.active .ferry-boat-svg {
   animation-play-state: running;
@@ -101,6 +113,13 @@
   0%   { transform: translateX(0); }
   45%  { transform: translateX(calc(100vw - 300px)); } /* approaches the dock */
   65%  { transform: translateX(calc(100vw - 300px)); } /* pause at dock */
+  100% { transform: translateX(0); }
+}
+
+@keyframes ferry-arrive-right {
+  0%   { transform: translateX(0); }
+  45%  { transform: translateX(calc(-100vw + 300px)); } /* approaches left dock */
+  65%  { transform: translateX(calc(-100vw + 300px)); } /* pause at dock */
   100% { transform: translateX(0); }
 }
 

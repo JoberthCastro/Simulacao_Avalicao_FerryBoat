@@ -17,6 +17,7 @@ function FerryAnimation({
   scheduledMode = false,
   scheduleGapMinutes = 120,
   variant = 'public', // 'public' | 'admin'
+  twoWay = false, // exibe ida e volta (duas direções)
 }) {
   const [src, setSrc] = useState('/ferrybot.png');
   const [showSvg, setShowSvg] = useState(false);
@@ -188,24 +189,38 @@ function FerryAnimation({
         <div className="wave wave-2" />
       </div>
 
+      <div className="dock dock-left" aria-hidden="true">
+        <div className="dock-pier" />
+      </div>
       <div className="dock" aria-hidden="true">
         <div className="dock-pier" />
       </div>
 
       {!showSvg && (
-        <img
-          className="ferry-boat"
-          src={src}
-          alt="Ferry chegando ao terminal"
-          onError={() => {
-            if (src !== '/ferrybot.jpg') {
-              setSrc('/ferrybot.jpg');
-            } else {
-              setShowSvg(true);
-            }
-          }}
-          draggable="false"
-        />
+        <>
+          {Array.from({ length: Math.max(1, servers) }).map((_, idx) => {
+            const isRightward = twoWay ? idx % 2 === 1 : false;
+            const delay = (speedSeconds / Math.max(1, servers)) * idx;
+            const animationDelay = `${delay}s, 0s`; // [arrive-delay, bob-delay]
+            return (
+              <img
+                key={idx}
+                className={`ferry-boat ${isRightward ? 'rightward' : ''}`}
+                src={src}
+                alt={isRightward ? 'Ferry retornando ao terminal oposto' : 'Ferry chegando ao terminal'}
+                style={{ animationDelay }}
+                onError={() => {
+                  if (src !== '/ferrybot.jpg') {
+                    setSrc('/ferrybot.jpg');
+                  } else {
+                    setShowSvg(true);
+                  }
+                }}
+                draggable="false"
+              />
+            );
+          })}
+        </>
       )}
 
       {showSvg && (
