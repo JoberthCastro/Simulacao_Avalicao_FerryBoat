@@ -1,0 +1,107 @@
+.heatmap-chart {
+  width: 100%;
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.heatmap-container {
+  display: inline-block;
+  min-width: 100%;
+}
+
+.heatmap-header {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.heatmap-corner {
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.heatmap-hour {
+  flex: 1;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding: 0.25rem;
+  min-width: 60px;
+}
+
+.heatmap-row {
+  display: flex;
+  margin-bottom: 0.25rem;
+  align-items: center;
+}
+
+.heatmap-day {
+  width: 60px;
+  flex-shrink: 0;
+  font-weight: 500;
+  color: var(--text-primary);
+  padding: 0.5rem;
+}
+
+.heatmap-cell {
+  flex: 1;
+  min-width: 60px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  margin: 0 0.125rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.1);
+}
+
+.heatmap-empty {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.heatmap-low {
+  background-color: #dbeafe;
+  color: var(--text-primary);
+}
+
+.heatmap-medium {
+  background-color: #60a5fa;
+}
+
+.heatmap-high {
+  background-color: #3b82f6;
+}
+
+.heatmap-very-high {
+  background-color: #1e40af;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.heatmap-legend-colors {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.heatmap-legend-color {
+  width: 30px;
+  height: 20px;
+  border-radius: 0.25rem;
+}
+

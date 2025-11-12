@@ -1,0 +1,29 @@
+.admin-login {
+  padding: 2rem 0;
+}
+
+.login-grid {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-button {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.error-box {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.75rem;
+  border-left: 4px solid var(--danger-color);
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--danger-color);
+  border-radius: 0.375rem;
+}
+
+

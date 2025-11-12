@@ -1,0 +1,47 @@
+.simulacao-public {
+  padding: 2rem 0;
+}
+
+.simulacao-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.simulate-button {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.loading-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+
+.ferry-spinner {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  animation: bob 1s ease-in-out infinite;
+}
+
+.ferry-emoji {
+  font-size: 40px;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.loading-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+
