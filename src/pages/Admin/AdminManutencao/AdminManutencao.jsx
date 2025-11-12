@@ -44,10 +44,14 @@ function AdminManutencao() {
                 <div className="metric">
                   <span className="metric-label">Próxima Manutenção:</span>
                   <span className="metric-value">
-                    {maintenance.nextMaintenance > 0 
-                      ? `Em ${maintenance.nextMaintenance} viagens`
-                      : 'Urgente'
-                    }
+                    {(() => {
+                      const baseLabel = maintenance.nextMaintenance > 0
+                        ? `Em ${maintenance.nextMaintenance} viagens`
+                        : 'Agora';
+                      return maintenance.status === 'Risco de falha'
+                        ? `${baseLabel} — Urgente`
+                        : baseLabel;
+                    })()}
                   </span>
                 </div>
               </div>

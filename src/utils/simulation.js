@@ -352,21 +352,22 @@ export function calculateMaintenanceStatus(trips, baseMTBF = 1000) {
       status: 'OK',
       color: 'green',
       message: 'Embarcação em bom estado',
-      nextMaintenance: baseMTBF - trips
+      nextMaintenance: Math.max(0, baseMTBF - trips)
     };
   } else if (failureProbability < 0.9) {
     return {
       status: 'Atenção',
       color: 'yellow',
       message: 'Manutenção preventiva recomendada',
-      nextMaintenance: baseMTBF - trips
+      nextMaintenance: Math.max(0, baseMTBF - trips)
     };
   } else {
     return {
       status: 'Risco de falha',
       color: 'red',
       message: 'Manutenção urgente necessária',
-      nextMaintenance: 0
+      // Mesmo em estado crítico, manter contagem regressiva até o MTBF
+      nextMaintenance: Math.max(0, baseMTBF - trips)
     };
   }
 }
