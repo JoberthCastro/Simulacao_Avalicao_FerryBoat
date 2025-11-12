@@ -274,14 +274,16 @@ function FerryAnimation({
           ))}
           {queueCount > 24 && <div className="more-cars">+{queueCount - 24}</div>}
         </div>
-        <div className="servers-visual" aria-label="Servidores (ferries)">
-          {serverStates.map((s, idx) => (
-            <div key={idx} className={`server-slot ${s.busy ? 'busy' : ''} ${s.failed ? 'failed' : ''} ${s.pulse ? 'pulse' : ''}`}>
-              <div className="server-label">F{idx + 1}</div>
-              <div className="server-status">{s.failed ? 'Falha' : s.busy ? 'Em serviço' : 'Livre'}</div>
-            </div>
-          ))}
-        </div>
+        {variant === 'admin' && (
+          <div className="servers-visual" aria-label="Servidores (ferries)">
+            {serverStates.map((s, idx) => (
+              <div key={idx} className={`server-slot ${s.busy ? 'busy' : ''} ${s.failed ? 'failed' : ''} ${s.pulse ? 'pulse' : ''}`}>
+                <div className="server-label">F{idx + 1}</div>
+                <div className="server-status">{s.failed ? 'Falha' : s.busy ? 'Em serviço' : 'Livre'}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {variant === 'public' && insightsNo && insightsYes && (

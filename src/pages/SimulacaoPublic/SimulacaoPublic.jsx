@@ -126,6 +126,7 @@ function SimulacaoPublic() {
               <div className="loading-area">
                 <FerryAnimation
                   active={loading}
+                  height={200}
                   lambda={animCfg?.lambda ?? 120}
                   mu={animCfg?.mu ?? 25}
                   servers={animCfg?.servers ?? 4}
